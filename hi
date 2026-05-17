@@ -1,0 +1,192 @@
+-- ========================================================
+-- THẮNG LỎ HUB - TỔNG HỢP VIP SCRIPT (ALL IN ONE)
+-- ========================================================
+
+-- Dọn dẹp sạch sẽ bộ nhớ tránh trùng lặp nút bấm cũ
+if game.CoreGui:FindFirstChild("ThangLoToggleGui") then
+    game.CoreGui:FindFirstChild("ThangLoToggleGui"):Destroy()
+end
+if game.CoreGui:FindFirstChild("ThangLoVenyx") then
+    game.CoreGui:FindFirstChild("ThangLoVenyx"):Destroy()
+end
+
+-- Tải thư viện Venyx UI Đẹp & Hiện Đại
+local Venyx = loadstring(game:HttpGet("https://raw.githubusercontent.com/Stefanuk12/Venyx-UI-Library/main/source.lua"))()
+local UI = Venyx.new("Thắng Lỏ Hub 🌊 | Tổng Hợp")
+
+-- Tạo các Trang (Pages) lớn
+local PageScript = UI:addPage("Chọn Script VIP", "rbxassetid://4483345998")
+local PageBoTro = UI:addPage("Bổ Trợ Delta", "rbxassetid://4483345998")
+
+-- Tạo các Mục (Sections) bên trong trang
+local SectionBlox = PageScript:addSection("--- SCRIPT BLOX FRUIT ---")
+local SectionAOT = PageScript:addSection("--- SCRIPT ATTACK ON TITAN ---")
+local SectionSailor = PageScript:addSection("--- SCRIPT SAILOR PIECE ---")
+local SectionBoTro = PageBoTro:addSection("Tối Ưu Nhân Vật & Hệ Thống")
+
+-- ==================== TRANG CHỌN SCRIPT VIP ====================
+
+-- [MỤC 1: ĐỦ 4 BẢN BLOX FRUIT]
+SectionBlox:addButton("🍎 Blox Fruit - W-azure Hub", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/240b9101aa03d7c37e1081a4b2671ef3.lua"))()
+    end)
+end)
+
+SectionBlox:addButton("🍎 Blox Fruit - Min Gaming Hub", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ZisokuVIP/ZisokuVIP/refs/heads/main/MinHub"))()
+    end)
+end)
+
+SectionBlox:addButton("🍎 Blox Fruit - Redz Hub", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/REDZHAX/RedzHub/main/REDZHOOD"))()
+    end)
+end)
+
+SectionBlox:addButton("🍎 Blox Fruit - Hoho Hub (Key)", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_v2.lua"))()
+    end)
+end)
+
+-- [MỤC 2: ĐỦ 3 BẢN ATTACK ON TITAN]
+SectionAOT:addButton("⚔️ AOT Revolution - Thần Sấm Hub", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/frizzzzzz/AOT-R/main/Main.lua"))()
+    end)
+end)
+
+SectionAOT:addButton("⚔️ AOT Evolution - Giọt Nước Hub", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/BaconLord/AOTE/main/Loader.lua"))()
+    end)
+end)
+
+SectionAOT:addButton("⚔️ AOT All Game - Ripper Hub Multi", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Vinxu/RipperHub/main/RipperHub.lua"))()
+    end)
+end)
+
+-- [MỤC 3: ĐỦ 4 BẢN SAILOR PIECE GỐC]
+SectionSailor:addButton("▶ Sailor Bản 1 (Bao-2204)", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/bao-2204/bao/refs/heads/main/Main/SailorPiece.lua"))()
+    end)
+end)
+
+SectionSailor:addButton("▶ Sailor Bản 2 (Midgard)", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/matheusmerigo/midgard/refs/heads/main/sailorpiece-main.lua"))()
+    end)
+end)
+
+SectionSailor:addButton("▶ Sailor Bản 3 (Luarmor Loader)", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/5946add9ab91f1e04cb005346a8b1968.lua"))()
+    end)
+end)
+
+SectionSailor:addButton("▶ Sailor Bản 4 (Meobeo8)", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/meobeo8/a/a/a"))()
+    end)
+end)
+
+
+-- ==================== TRANG BỔ TRỢ DELTA ====================
+SectionBoTro:addButton("⚡ Tối Ưu Đồ Họa (Giảm Lag)", function()
+    pcall(function()
+        game:GetService("Lighting").FogEnd = 999999
+        for _, v in pairs(game:GetService("Lighting"):GetChildren()) do
+            if v:IsA("Atmosphere") or v:IsA("Sky") then v:Destroy() end
+        end
+    end)
+end)
+
+SectionBoTro:addButton("🔥 SIÊU FIX LAG (Xóa Texture & Hiệu Ứng)", function()
+    pcall(function()
+        game:GetService("Lighting").GlobalShadows = false
+        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+        for _, v in pairs(game:GetDescendants()) do
+            if v:IsA("Decal") or v:IsA("Texture") then
+                v:Destroy()
+            elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                v.Enabled = false
+            elseif v:IsA("MeshPart") then
+                v.TextureID = ""
+                v.CollisionFidelity = Enum.CollisionFidelity.Box
+            elseif v:IsA("Part") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") or v:IsA("WedgePart") then
+                v.Material = Enum.Material.SmoothPlastic
+                v.Reflectance = 0
+            end
+        end
+    end)
+end)
+
+-- ==================== THUẬT TOÁN ĐỊNH VỊ CĂN GIỮA MÀN HÌNH ====================
+local MainGui = nil
+local MainMenuFrame = nil
+
+for _, v in pairs(game.CoreGui:GetChildren()) do
+    if v:IsA("ScreenGui") and v:FindFirstChild("Main") then
+        v.Name = "ThangLoVenyx"
+        MainGui = v
+        MainMenuFrame = v.Main
+        break
+    end
+end
+
+if MainMenuFrame then
+    MainMenuFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    MainMenuFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+end
+
+-- ==================== CƠ CHẾ NÚT TRÒN BẬT/TẮT CAO CẤP (CHỐNG LỆCH) ====================
+local ToggleGui = Instance.new("ScreenGui")
+local ToggleButton = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
+local UIGradient = Instance.new("UIGradient")
+
+ToggleGui.Name = "ThangLoToggleGui"
+ToggleGui.Parent = game.CoreGui
+ToggleGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+ToggleButton.Parent = ToggleGui
+ToggleButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+ToggleButton.Position = UDim2.new(0, 20, 0, 150)
+ToggleButton.Size = UDim2.new(0, 60, 0, 60)
+ToggleButton.Font = Enum.Font.GothamBold
+ToggleButton.Text = "Thắng Lỏ"
+ToggleButton.TextColor3 = Color3.fromRGB(0, 255, 255)
+ToggleButton.TextSize = 12.00
+ToggleButton.Draggable = true 
+
+UICorner.CornerRadius = UDim.new(0, 50)
+UICorner.Parent = ToggleButton
+
+UIGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 240, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 80, 255))
+}
+UIGradient.Parent = ToggleButton
+
+local MenuDangMo = true
+
+ToggleButton.MouseButton1Click:Connect(function()
+    if MainGui and MainMenuFrame then
+        if MenuDangMo then
+            MainGui.Enabled = false
+            MainMenuFrame.Position = UDim2.new(0, -9999, 0, -9999)
+            MenuDangMo = false
+            ToggleButton.TextColor3 = Color3.fromRGB(150, 150, 150)
+        else
+            MainMenuFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+            MainGui.Enabled = true
+            MenuDangMo = true
+            ToggleButton.TextColor3 = Color3.fromRGB(0, 255, 255)
+        end
+    end
+end)
