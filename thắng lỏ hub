@@ -1,6 +1,6 @@
 -- ======================================================== --
---         THẰNG LỎ HUB BETA - PHIÊN BẢN ĐƯA FPS RA NGOÀI       --
---         CẬP NHẬT: TỰ ĐỘNG LƯU KEY 24H VÀO MÁY NGƯỜI CHƠI     --
+--         THẰNG LỎ HUB FREE - PHIÊN BẢN CHÍNH THỨC             --
+--         CẬP NHẬT: TỰ ĐỘNG ĐỔI KEY NGẪU NHIÊN SAU 24 GIỜ     --
 -- ======================================================== --
 
 -- [CẤU HÌNH HỆ THỐNG & ĐỒ HỌA]
@@ -8,28 +8,34 @@ local Anime_Asset_ID = "rbxassetid://13476483161"
 local Web_Get_Key_URL = "https://link4m.org/go/mUNaEa"
 local DiscordUrl = "https://discord.gg/vbJfXFzku"
 local Backup_Key = "ThangLoAdminVIP99"
-local Storage_File_Name = "ThangLoHub_KeyAuth.txt" -- Tên file lưu trên máy người chơi
+local Storage_File_Name = "ThangLoHub_KeyAuth.txt"
 
--- Biến toàn cục kiểm soát vòng lặp hệ thống (Tránh rò rỉ bộ nhớ gây tụt FPS)
+-- Biến toàn cục kiểm soát vòng lặp hệ thống
 local Script_Is_Running = true
 
--- [THUẬT TOÁN TẠO KEY ĐỘNG 24H VÀ ĐỒNG BỘ THEO NGÀY]
+-- [THUẬT TOÁN TẠO KEY NGẪU NHIÊN ĐỒNG BỘ THEO NGÀY 24H]
 local dateTable = os.date("*t")
 local Current_Day_String = tostring(dateTable.day) .. "/" .. tostring(dateTable.month) .. "/" .. tostring(dateTable.year)
 
-math.randomseed(dateTable.day * 1234 + dateTable.month * 567 + dateTable.year)
-local characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-local generatedKey = ""
-for i = 1, 12 do
-    local randomIndex = math.random(1, #characters)
-    generatedKey = generatedKey .. string.sub(characters, randomIndex, randomIndex)
+local function GenerateDailyRandomKey()
+    local seed = (dateTable.day * 31) + (dateTable.month * 7) + (dateTable.year - 2000)
+    math.randomseed(seed)
+    
+    local chars = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789"
+    local randomLength = 6
+    local randomCode = ""
+    
+    for i = 1, randomLength do
+        local randIndex = math.random(1, #chars)
+        randomCode = randomCode .. string.sub(chars, randIndex, randIndex)
+    end
+    
+    return "TL-HUB-" .. randomCode
 end
-local System_Correct_Key = "TL-HUB-" .. generatedKey
-math.randomseed(os.time())
 
--- ======================================================== --
+local System_Correct_Key = GenerateDailyRandomKey()
+
 -- CÁC HÀM BỔ TRỢ HỆ THỐNG
--- ======================================================== --
 local function CopyToClipboard(text)
     local s = pcall(function()
         if setclipboard then setclipboard(text)
@@ -38,9 +44,6 @@ local function CopyToClipboard(text)
     end)
     return s
 end
-
--- Tự động copy Key chính ngày hôm nay vào máy bạn (Chủ Script)
-CopyToClipboard(System_Correct_Key)
 
 local UserInputService = game:GetService("UserInputService")
 local function MakeWindowDraggable(frame, dragHandle)
@@ -85,9 +88,7 @@ local TextElements = {
     Buttons = {}
 }
 
--- ======================================================== --
 -- KHỞI TẠO FRAME HIỂN THỊ FPS RA NGOÀI MÀN HÌNH CHÍNH
--- ======================================================== --
 local FpsGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 FpsGui.Name = "ThangLoFpsGui"
 FpsGui.Enabled = false 
@@ -132,9 +133,7 @@ task.spawn(function()
     end
 end)
 
--- ======================================================== --
 -- 1. KHỞI TẠO GIAO DIỆN CHÍNH LỚN (MAIN GUI)
--- ======================================================== --
 local MainGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 MainGui.Name = "ThangLoMainGui"
 MainGui.Enabled = false
@@ -243,9 +242,7 @@ MaximizeMainBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- ======================================================== --
 -- 2. HỆ THỐNG QUẢN LÝ TAB MƯỢT MÀ
--- ======================================================== --
 local Tabs = {}
 local function CreateTab(tabName)
     local TabButton = Instance.new("TextButton", Sidebar)
@@ -366,7 +363,7 @@ local function CreateScriptButton(parent, text, scriptUrl)
     end)
 end
 
--- Thêm các Script Button...
+-- Thêm Script Buttons
 CreateScriptButton(SailorPage, "Midgard Hub - Sailor Piece", "https://raw.githubusercontent.com/matheusmerigo/midgard/refs/heads/main/sailorpiece-main.lua")
 CreateScriptButton(SailorPage, "Bảo Hub - Sailor Piece", "https://raw.githubusercontent.com/bao-2204/bao/refs/heads/main/Main/SailorPiece.lua")
 CreateScriptButton(SailorPage, "Luarmor Loader V1 - Sailor", "https://api.luarmor.net/files/v4/loaders/5946add9ab91f1e04cb005346a8b1968.lua")
@@ -436,9 +433,7 @@ FixLagBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- ======================================================== --
 -- 5. GIAO DIỆN CẢNH BÁO XÁC NHẬN XÓA (PROMPT GUI)
--- ======================================================== --
 local PromptOverlay = Instance.new("Frame", MainGui)
 PromptOverlay.Name = "PromptOverlay"
 PromptOverlay.Size = UDim2.new(1, 0, 1, 0)
@@ -517,9 +512,7 @@ ConfirmBtn.MouseButton1Click:Connect(function()
     if game:GetService("CoreGui"):FindFirstChild("ThangLoFpsGui") then game:GetService("CoreGui").ThangLoFpsGui:Destroy() end 
 end)
 
--- ======================================================== --
 -- 6. HÀM KÍCH HOẠT MENU CHÍNH (KHI KEY ĐÚNG)
--- ======================================================== --
 local function OpenMainMenu()
     MainGui.Enabled = true
     FpsGui.Enabled = true 
@@ -546,9 +539,7 @@ local function OpenMainMenu()
     end)
 end
 
--- ======================================================== --
 -- 7. GIAO DIỆN KHÓA XÁC THỰC (KEY SYSTEM GUI)
--- ======================================================== --
 local function CreateKeySystemGui()
     local KeyGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
     KeyGui.Name = "ThangLoKeyGui"
@@ -627,9 +618,9 @@ local function CreateKeySystemGui()
     StatusLabel.Position = UDim2.new(0.05, 0, 0.78, 0) 
     StatusLabel.BackgroundTransparency = 1
     StatusLabel.Font = Enum.Font.Ubuntu
-    StatusLabel.Text = "Hệ thống Key tự động làm mới sau mỗi 24 giờ!"
-    StatusLabel.TextColor3 = Color3.fromRGB(150, 150, 165)
-    StatusLabel.TextSize = 13
+    StatusLabel.Text = "Hệ thống bảo mật Thằng Lỏ chống sao chép và Spam."
+    StatusLabel.TextColor3 = Color3.fromRGB(150, 150, 160)
+    StatusLabel.TextSize = 12
 
     GetKeyBtn.MouseButton1Click:Connect(function()
         if CopyToClipboard(Web_Get_Key_URL) then
@@ -644,7 +635,6 @@ local function CreateKeySystemGui()
             StatusLabel.Text = "XÁC THỰC THÀNH CÔNG! ĐANG MỞ MENU..."
             StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
             
-            -- LƯU KEY VÀO MÁY NGƯỜI CHƠI (Nếu không phải key Admin)
             if userInput == System_Correct_Key and writefile then
                 pcall(function()
                     writefile(Storage_File_Name, System_Correct_Key .. "|" .. Current_Day_String)
@@ -661,34 +651,27 @@ local function CreateKeySystemGui()
     end)
 end
 
--- ======================================================== --
 -- 8. KIỂM TRA FILE KEY ĐÃ LƯU KHI CHẠY SCRIPT
--- ======================================================== --
 local Key_Is_Valid = false
 
 if readfile and isfile and isfile(Storage_File_Name) then
     local success, content = pcall(function() return readfile(Storage_File_Name) end)
     if success and content then
-        -- Phân tách Chuỗi Key và Ngày Lưu bằng dấu "|"
         local data = string.split(content, "|")
         local savedKey = data[1]
         local savedDate = data[2]
         
-        -- Nếu Key đã lưu khớp với Key hệ thống hôm nay VÀ Ngày lưu đúng là ngày hôm nay
         if savedKey == System_Correct_Key and savedDate == Current_Day_String then
             Key_Is_Valid = true
         else
-            -- Nếu hết 24h (sang ngày mới), xóa file cũ bắt get lại
             pcall(function() delfile(Storage_File_Name) end)
         end
     end
 end
 
--- PHÂN LUỒNG KHỞI CHẠY
+-- PHÂN LUỒNG KHỞI CHẠY CHÍNH THỨC
 if Key_Is_Valid then
-    -- Nếu key cũ còn hạn -> Vào thẳng menu chính, không hiện bảng nhập key
     OpenMainMenu()
 else
-    -- Nếu chưa có key hoặc key hết hạn -> Hiện bảng nhập key bắt buộc
     CreateKeySystemGui()
 end
