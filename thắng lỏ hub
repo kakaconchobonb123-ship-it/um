@@ -1,6 +1,6 @@
 -- ======================================================== --
 --         THẰNG LỎ HUB BETA - PHIÊN BẢN ĐƯA FPS RA NGOÀI       --
---         CẬP NHẬT: FIX LỖI ĐÈ CHỮ & FIX LỖI TỤT FPS         --
+--         CẬP NHẬT: TỰ ĐỘNG LƯU KEY 24H VÀO MÁY NGƯỜI CHƠI     --
 -- ======================================================== --
 
 -- [CẤU HÌNH HỆ THỐNG & ĐỒ HỌA]
@@ -8,12 +8,15 @@ local Anime_Asset_ID = "rbxassetid://13476483161"
 local Web_Get_Key_URL = "https://link4m.org/go/mUNaEa"
 local DiscordUrl = "https://discord.gg/vbJfXFzku"
 local Backup_Key = "ThangLoAdminVIP99"
+local Storage_File_Name = "ThangLoHub_KeyAuth.txt" -- Tên file lưu trên máy người chơi
 
 -- Biến toàn cục kiểm soát vòng lặp hệ thống (Tránh rò rỉ bộ nhớ gây tụt FPS)
 local Script_Is_Running = true
 
--- [THUẬT TOÁN TẠO KEY ĐỘNG 24H]
+-- [THUẬT TOÁN TẠO KEY ĐỘNG 24H VÀ ĐỒNG BỘ THEO NGÀY]
 local dateTable = os.date("*t")
+local Current_Day_String = tostring(dateTable.day) .. "/" .. tostring(dateTable.month) .. "/" .. tostring(dateTable.year)
+
 math.randomseed(dateTable.day * 1234 + dateTable.month * 567 + dateTable.year)
 local characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 local generatedKey = ""
@@ -35,6 +38,9 @@ local function CopyToClipboard(text)
     end)
     return s
 end
+
+-- Tự động copy Key chính ngày hôm nay vào máy bạn (Chủ Script)
+CopyToClipboard(System_Correct_Key)
 
 local UserInputService = game:GetService("UserInputService")
 local function MakeWindowDraggable(frame, dragHandle)
@@ -84,11 +90,11 @@ local TextElements = {
 -- ======================================================== --
 local FpsGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 FpsGui.Name = "ThangLoFpsGui"
-FpsGui.Enabled = false -- Chỉ bật sau khi check Key thành công
+FpsGui.Enabled = false 
 
 local FpsFrame = Instance.new("Frame", FpsGui)
 FpsFrame.Size = UDim2.new(0, 140, 0, 35)
-FpsFrame.Position = UDim2.new(0, 20, 0, 20) -- Góc trên cùng bên trái màn hình
+FpsFrame.Position = UDim2.new(0, 20, 0, 20) 
 FpsFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 18)
 FpsFrame.BackgroundTransparency = 0.15
 FpsFrame.ZIndex = 10
@@ -96,7 +102,7 @@ Instance.new("UICorner", FpsFrame).CornerRadius = UDim.new(0, 8)
 local FpsStroke = Instance.new("UIStroke", FpsFrame)
 FpsStroke.Thickness = 1.2
 ApplyRainbowAura(FpsStroke)
-MakeWindowDraggable(FpsFrame) -- Cho phép người dùng kéo thả FPS đi vị trí khác nếu muốn
+MakeWindowDraggable(FpsFrame) 
 
 local FpsLabel = Instance.new("TextLabel", FpsFrame)
 FpsLabel.Size = UDim2.new(1, 0, 1, 0)
@@ -108,7 +114,6 @@ FpsLabel.TextSize = 13
 FpsLabel.TextXAlignment = Enum.TextXAlignment.Center
 FpsLabel.ZIndex = 11
 
--- Vòng lặp đo FPS chạy độc lập ngoài nền
 local RunService = game:GetService("RunService")
 task.spawn(function()
     local lastUpdate = os.clock()
@@ -145,7 +150,6 @@ local MainStroke = Instance.new("UIStroke", MainFrame)
 MainStroke.Thickness = 1.5
 ApplyRainbowAura(MainStroke)
 
--- Chèn ảnh nền Anime
 local AnimeBackground = Instance.new("ImageLabel", MainFrame)
 AnimeBackground.Name = "AnimeBackground"
 AnimeBackground.Size = UDim2.new(1, 0, 1, 0)
@@ -157,7 +161,6 @@ AnimeBackground.ImageTransparency = 0.45
 AnimeBackground.ZIndex = 1                     
 Instance.new("UICorner", AnimeBackground).CornerRadius = UDim.new(0, 14)
 
--- Thanh Tiêu Đề
 local MainTitle = Instance.new("TextLabel", MainFrame)
 MainTitle.Size = UDim2.new(1, 0, 0, 50)
 MainTitle.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
@@ -172,7 +175,6 @@ Instance.new("UICorner", MainTitle).CornerRadius = UDim.new(0, 14)
 MakeWindowDraggable(MainFrame, MainTitle)
 table.insert(TextElements.Titles, MainTitle)
 
--- Nút Ẩn Menu (-)
 local HideMainBtn = Instance.new("TextButton", MainFrame)
 HideMainBtn.Size = UDim2.new(0, 32, 0, 32)
 HideMainBtn.Position = UDim2.new(1, -115, 0, 9)
@@ -186,7 +188,6 @@ Instance.new("UICorner", HideMainBtn).CornerRadius = UDim.new(0, 8)
 Instance.new("UIStroke", HideMainBtn).Color = Color3.fromRGB(45, 55, 70)
 HideMainBtn.MouseButton1Click:Connect(function() MainGui.Enabled = false end)
 
--- Nút Phóng Toàn Màn Hình [ ]
 local MaximizeMainBtn = Instance.new("TextButton", MainFrame)
 MaximizeMainBtn.Size = UDim2.new(0, 32, 0, 32)
 MaximizeMainBtn.Position = UDim2.new(1, -75, 0, 9)
@@ -199,7 +200,6 @@ MaximizeMainBtn.ZIndex = 5
 Instance.new("UICorner", MaximizeMainBtn).CornerRadius = UDim.new(0, 8)
 Instance.new("UIStroke", MaximizeMainBtn).Color = Color3.fromRGB(45, 45, 70)
 
--- Thanh Sidebar Trái
 local Sidebar = Instance.new("Frame", MainFrame)
 Sidebar.Size = UDim2.new(0, 170, 1, -50)
 Sidebar.Position = UDim2.new(0, 0, 0, 50)
@@ -216,7 +216,6 @@ SidebarList.HorizontalAlignment = Enum.HorizontalAlignment.Center
 local SidebarPadding = Instance.new("UIPadding", Sidebar)
 SidebarPadding.PaddingTop = UDim.new(0, 10)
 
--- Khung chứa nội dung bên phải
 local ContentContainer = Instance.new("Frame", MainFrame)
 ContentContainer.Size = UDim2.new(1, -185, 1, -65)
 ContentContainer.Position = UDim2.new(0, 180, 0, 60)
@@ -295,7 +294,6 @@ local function CreateTab(tabName)
     return TabPage
 end
 
--- KHỞI TẠO CÁC DANH MỤC TAB GAME 
 local SailorPage      = CreateTab("Sailor Piece")
 local KickLuckyPage   = CreateTab("Kick A Lucky Block")
 local AotPage         = CreateTab("Attack On Titan")
@@ -304,7 +302,6 @@ local PerformancePage = CreateTab("Tối Ưu Hệ Thống")
 
 Tabs["Sailor Piece"].Page.Visible = true
 
--- HÀM TẠO NÚT BẬT/TẮT SCRIPT
 local function CreateScriptButton(parent, text, scriptUrl)
     local Btn = Instance.new("TextButton", parent)
     Btn.Size = UDim2.new(0.96, 0, 0, 44)
@@ -369,29 +366,23 @@ local function CreateScriptButton(parent, text, scriptUrl)
     end)
 end
 
--- ======================================================== --
--- KHO SCRIPT TÍCH HỢP CHO CÁC TỰA GAME
--- ======================================================== --
--- Sailor Piece
+-- Thêm các Script Button...
 CreateScriptButton(SailorPage, "Midgard Hub - Sailor Piece", "https://raw.githubusercontent.com/matheusmerigo/midgard/refs/heads/main/sailorpiece-main.lua")
 CreateScriptButton(SailorPage, "Bảo Hub - Sailor Piece", "https://raw.githubusercontent.com/bao-2204/bao/refs/heads/main/Main/SailorPiece.lua")
 CreateScriptButton(SailorPage, "Luarmor Loader V1 - Sailor", "https://api.luarmor.net/files/v4/loaders/5946add9ab91f1e04cb005346a8b1968.lua")
 CreateScriptButton(SailorPage, "Mẹo Béo Hub - Sailor Piece", "https://raw.githubusercontent.com/meobeo8/a/a/a")
 CreateScriptButton(SailorPage, "Luarmor Loader V2 - Sailor", "https://api.luarmor.net/files/v4/loaders/3fcb385d3c782d11837cb680ae2a3ea4.lua")
 
--- Kick A Lucky Block
 CreateScriptButton(KickLuckyPage, "Luxy Hub - Lucky Block", "https://raw.githubusercontent.com/Omnie7/Luxy-Hub/refs/heads/main/main.lua")
 CreateScriptButton(KickLuckyPage, "Hanni Loader - Lucky Block", "https://raw.githubusercontent.com/hanniii1/Loader/refs/heads/main/BFLoader.lua")
 CreateScriptButton(KickLuckyPage, "FourHub - Lucky Block", "https://fourhub13.vercel.app/KickALuckyBlock.lua")
 CreateScriptButton(KickLuckyPage, "STREE HUB - Lucky Block", "https://raw.githubusercontent.com/create-stree/STREE-HUB/refs/heads/main/Loader/Main.lua")
 CreateScriptButton(KickLuckyPage, "VisionWare - Lucky Block", "https://visionware.wtf/loader")
 
--- Attack on titan
 CreateScriptButton(AotPage, "Vynixius - AOT Evolution", "https://raw.githubusercontent.com/RegularVynixius/Vynixius-Scripts/main/AOTEvolution.lua")
 CreateScriptButton(AotPage, "Attack On Titan Mobile Hub", "https://raw.githubusercontent.com/GhostPlayer352/AOT/main/Hub.lua")
 CreateScriptButton(AotPage, "Horizon Hub - AOT", "https://raw.githubusercontent.com/HorizonHub/AOT/main/source.lua")
 
--- Blox Fruits
 CreateScriptButton(BloxPage, "Hoho Hub V3", 'https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_V3')
 CreateScriptButton(BloxPage, "RedzHub (Tối ưu Mobile)", "https://raw.githubusercontent.com/REDZHUB/BloxFruits/main/redz.lua")
 CreateScriptButton(BloxPage, "W-Azure Hub", "https://raw.githubusercontent.com/waza80/w-azure/main/NewGui.lua")
@@ -399,7 +390,6 @@ CreateScriptButton(BloxPage, "Kraki Hub (Tiếng Việt)", "https://raw.githubus
 CreateScriptButton(BloxPage, "Mukuro Hub V2", "https://raw.githubusercontent.com/xQuartyx/Mukuro/main/mukuro.lua")
 CreateScriptButton(BloxPage, "Ripper Hub V4", "https://raw.githubusercontent.com/xDestinyx/RipperHubV4/main/loading.lua")
 
--- Tab Tối Ưu cũ thay thế bằng nút Bật/Tắt hiển thị FPS bên ngoài
 local FpsToggleBtn = Instance.new("TextButton", PerformancePage)
 FpsToggleBtn.Size = UDim2.new(0.96, 0, 0, 48)
 FpsToggleBtn.BackgroundColor3 = Color3.fromRGB(24, 24, 36)
@@ -411,10 +401,7 @@ FpsToggleBtn.ZIndex = 4
 Instance.new("UICorner", FpsToggleBtn).CornerRadius = UDim.new(0, 8)
 local FpsToggleStroke = Instance.new("UIStroke", FpsToggleBtn)
 FpsToggleStroke.Color = Color3.fromRGB(45, 55, 70)
-
-FpsToggleBtn.MouseButton1Click:Connect(function()
-    FpsGui.Enabled = not FpsGui.Enabled
-end)
+FpsToggleBtn.MouseButton1Click:Connect(function() FpsGui.Enabled = not FpsGui.Enabled end)
 
 local FixLagBtn = Instance.new("TextButton", PerformancePage)
 FixLagBtn.Size = UDim2.new(0.96, 0, 0, 48)
@@ -450,7 +437,7 @@ FixLagBtn.MouseButton1Click:Connect(function()
 end)
 
 -- ======================================================== --
--- 5. HỆ THỐNG CẢNH BÁO XÁC NHẬN XÓA (PROMPT GUI)
+-- 5. GIAO DIỆN CẢNH BÁO XÁC NHẬN XÓA (PROMPT GUI)
 -- ======================================================== --
 local PromptOverlay = Instance.new("Frame", MainGui)
 PromptOverlay.Name = "PromptOverlay"
@@ -522,141 +509,186 @@ CloseMainBtn.MouseButton1Click:Connect(function() PromptOverlay.Visible = true e
 CancelBtn.MouseButton1Click:Connect(function() PromptOverlay.Visible = false end)
 
 ConfirmBtn.MouseButton1Click:Connect(function()
-    Script_Is_Running = false -- Ngắt mọi vòng lặp ngầm 
+    Script_Is_Running = false 
     task.wait(0.05)
-    
     if game:GetService("CoreGui"):FindFirstChild("ThangLoMainGui") then game:GetService("CoreGui").ThangLoMainGui:Destroy() end
     if game:GetService("CoreGui"):FindFirstChild("ThangLoToggleGui") then game:GetService("CoreGui").ThangLoToggleGui:Destroy() end
     if game:GetService("CoreGui"):FindFirstChild("ThangLoKeyGui") then game:GetService("CoreGui").ThangLoKeyGui:Destroy() end
-    if game:GetService("CoreGui"):FindFirstChild("ThangLoFpsGui") then game:GetService("CoreGui").ThangLoFpsGui:Destroy() end -- Xóa sạch khung FPS ngoài màn hình
+    if game:GetService("CoreGui"):FindFirstChild("ThangLoFpsGui") then game:GetService("CoreGui").ThangLoFpsGui:Destroy() end 
 end)
 
 -- ======================================================== --
--- 6. GIAO DIỆN KHÓA XÁC THỰC (KEY SYSTEM GUI)
+-- 6. HÀM KÍCH HOẠT MENU CHÍNH (KHI KEY ĐÚNG)
 -- ======================================================== --
-local KeyGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-KeyGui.Name = "ThangLoKeyGui"
+local function OpenMainMenu()
+    MainGui.Enabled = true
+    FpsGui.Enabled = true 
+    
+    local ToggleGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+    ToggleGui.Name = "ThangLoToggleGui"
+    local ToggleButton = Instance.new("TextButton", ToggleGui)
+    ToggleButton.BackgroundColor3 = Color3.fromRGB(14, 14, 22)
+    ToggleButton.Position = UDim2.new(0, 20, 0, 140)
+    ToggleButton.Size = UDim2.new(0, 68, 0, 58)
+    ToggleButton.Font = Enum.Font.FredokaOne
+    ToggleButton.Text = "Thang Lo\nHub Free"
+    ToggleButton.TextColor3 = Color3.fromRGB(0, 255, 220)
+    ToggleButton.TextSize = 11
+    Instance.new("UICorner", ToggleButton).CornerRadius = UDim.new(0, 14)
+    local ToggleStroke = Instance.new("UIStroke", ToggleButton)
+    ApplyRainbowAura(ToggleStroke)
+    MakeWindowDraggable(ToggleButton)
 
-local KeyMain = Instance.new("Frame", KeyGui)
-KeyMain.BackgroundColor3 = Color3.fromRGB(12, 12, 18)
-KeyMain.Size = UDim2.new(0, 400, 0, 260)
-KeyMain.Position = UDim2.new(0.5, -200, 0.5, -130)
-Instance.new("UICorner", KeyMain).CornerRadius = UDim.new(0, 12)
-local KeyStroke = Instance.new("UIStroke", KeyMain)
-KeyStroke.Thickness = 1.2
-ApplyRainbowAura(KeyStroke)
+    local MenuDangMo = true
+    ToggleButton.MouseButton1Click:Connect(function()
+        MenuDangMo = not MenuDangMo
+        MainGui.Enabled = MenuDangMo
+    end)
+end
 
-local KeyTitle = Instance.new("TextLabel", KeyMain)
-KeyTitle.Size = UDim2.new(1, 0, 0, 46)
-KeyTitle.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
-KeyTitle.Font = Enum.Font.FredokaOne
-KeyTitle.Text = "    THẰNG LỎ EXECUTIVE - HỆ THỐNG KHÓA KEY"
-KeyTitle.TextColor3 = Color3.fromRGB(255, 150, 0)
-KeyTitle.TextSize = 13
-KeyTitle.TextXAlignment = Enum.TextXAlignment.Left
-Instance.new("UICorner", KeyTitle).CornerRadius = UDim.new(0, 12)
-MakeWindowDraggable(KeyMain, KeyTitle)
+-- ======================================================== --
+-- 7. GIAO DIỆN KHÓA XÁC THỰC (KEY SYSTEM GUI)
+-- ======================================================== --
+local function CreateKeySystemGui()
+    local KeyGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+    KeyGui.Name = "ThangLoKeyGui"
 
-local CloseKeyBtn = Instance.new("TextButton", KeyMain)
-CloseKeyBtn.Size = UDim2.new(0, 30, 0, 30)
-CloseKeyBtn.Position = UDim2.new(1, -36, 0, 8)
-CloseKeyBtn.BackgroundColor3 = Color3.fromRGB(40, 18, 18)
-CloseKeyBtn.Font = Enum.Font.FredokaOne
-CloseKeyBtn.Text = "X"
-CloseKeyBtn.TextColor3 = Color3.fromRGB(255, 80, 80)
-CloseKeyBtn.TextSize = 13
-CloseKeyBtn.ZIndex = 5
-Instance.new("UICorner", CloseKeyBtn).CornerRadius = UDim.new(0, 8)
-CloseKeyBtn.MouseButton1Click:Connect(function() KeyGui:Destroy() end)
+    local KeyMain = Instance.new("Frame", KeyGui)
+    KeyMain.BackgroundColor3 = Color3.fromRGB(12, 12, 18)
+    KeyMain.Size = UDim2.new(0, 400, 0, 260)
+    KeyMain.Position = UDim2.new(0.5, -200, 0.5, -130)
+    Instance.new("UICorner", KeyMain).CornerRadius = UDim.new(0, 12)
+    local KeyStroke = Instance.new("UIStroke", KeyMain)
+    KeyStroke.Thickness = 1.2
+    ApplyRainbowAura(KeyStroke)
 
-local KeyInput = Instance.new("TextBox", KeyMain)
-KeyInput.Size = UDim2.new(0.9, 0, 0, 44)
-KeyInput.Position = UDim2.new(0.05, 0, 0.26, 0)
-KeyInput.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
-KeyInput.Font = Enum.Font.Ubuntu
-KeyInput.PlaceholderText = "Dán mã khóa Key 24H lấy từ Website vào đây..."
-KeyInput.Text = ""
-KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-KeyInput.TextSize = 14
-Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
-local InputStroke = Instance.new("UIStroke", KeyInput)
-InputStroke.Color = Color3.fromRGB(45, 45, 60)
+    local KeyTitle = Instance.new("TextLabel", KeyMain)
+    KeyTitle.Size = UDim2.new(1, 0, 0, 46)
+    KeyTitle.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
+    KeyTitle.Font = Enum.Font.FredokaOne
+    KeyTitle.Text = "    THẰNG LỎ EXECUTIVE - HỆ THỐNG KHÓA KEY"
+    KeyTitle.TextColor3 = Color3.fromRGB(255, 150, 0)
+    KeyTitle.TextSize = 13
+    KeyTitle.TextXAlignment = Enum.TextXAlignment.Left
+    Instance.new("UICorner", KeyTitle).CornerRadius = UDim.new(0, 12)
+    MakeWindowDraggable(KeyMain, KeyTitle)
 
-local GetKeyBtn = Instance.new("TextButton", KeyMain)
-GetKeyBtn.Size = UDim2.new(0.43, 0, 0, 42)
-GetKeyBtn.Position = UDim2.new(0.05, 0, 0.52, 0)
-GetKeyBtn.BackgroundColor3 = Color3.fromRGB(24, 24, 36)
-GetKeyBtn.Font = Enum.Font.Ubuntu
-GetKeyBtn.Text = "LẤY LINK KEY"
-GetKeyBtn.TextColor3 = Color3.fromRGB(0, 230, 255)
-GetKeyBtn.TextSize = 13
-Instance.new("UICorner", GetKeyBtn).CornerRadius = UDim.new(0, 8)
-local GetKeyStroke = Instance.new("UIStroke", GetKeyBtn)
-GetKeyStroke.Color = Color3.fromRGB(40, 55, 70)
+    local CloseKeyBtn = Instance.new("TextButton", KeyMain)
+    CloseKeyBtn.Size = UDim2.new(0, 30, 0, 30)
+    CloseKeyBtn.Position = UDim2.new(1, -36, 0, 8)
+    CloseKeyBtn.BackgroundColor3 = Color3.fromRGB(40, 18, 18)
+    CloseKeyBtn.Font = Enum.Font.FredokaOne
+    CloseKeyBtn.Text = "X"
+    CloseKeyBtn.TextColor3 = Color3.fromRGB(255, 80, 80)
+    CloseKeyBtn.TextSize = 13
+    CloseKeyBtn.ZIndex = 5
+    Instance.new("UICorner", CloseKeyBtn).CornerRadius = UDim.new(0, 8)
+    CloseKeyBtn.MouseButton1Click:Connect(function() KeyGui:Destroy() end)
 
-local CheckKeyBtn = Instance.new("TextButton", KeyMain)
-CheckKeyBtn.Size = UDim2.new(0.43, 0, 0, 42)
-CheckKeyBtn.Position = UDim2.new(0.52, 0, 0.52, 0)
-CheckKeyBtn.BackgroundColor3 = Color3.fromRGB(18, 36, 22)
-CheckKeyBtn.Font = Enum.Font.Ubuntu
-CheckKeyBtn.Text = "KIỂM TRA KEY"
-CheckKeyBtn.TextColor3 = Color3.fromRGB(100, 255, 100)
-CheckKeyBtn.TextSize = 13
-Instance.new("UICorner", CheckKeyBtn).CornerRadius = UDim.new(0, 8)
-local CheckKeyStroke = Instance.new("UIStroke", CheckKeyBtn)
-CheckKeyStroke.Color = Color3.fromRGB(35, 70, 45)
+    local KeyInput = Instance.new("TextBox", KeyMain)
+    KeyInput.Size = UDim2.new(0.9, 0, 0, 44)
+    KeyInput.Position = UDim2.new(0.05, 0, 0.26, 0)
+    KeyInput.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
+    KeyInput.Font = Enum.Font.Ubuntu
+    KeyInput.PlaceholderText = "Dán mã khóa Key 24H lấy từ Website vào đây..."
+    KeyInput.Text = ""
+    KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+    KeyInput.TextSize = 14
+    Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
+    local InputStroke = Instance.new("UIStroke", KeyInput)
+    InputStroke.Color = Color3.fromRGB(45, 45, 60)
 
-local StatusLabel = Instance.new("TextLabel", KeyMain)
-StatusLabel.Size = UDim2.new(0.9, 0, 0, 30)
-StatusLabel.Position = UDim2.new(0.05, 0, 0.78, 0) 
-StatusLabel.BackgroundTransparency = 1
-StatusLabel.Font = Enum.Font.Ubuntu
-StatusLabel.Text = "Hệ thống Key tự động làm mới sau mỗi 24 giờ!"
-StatusLabel.TextColor3 = Color3.fromRGB(150, 150, 165)
-StatusLabel.TextSize = 13
+    local GetKeyBtn = Instance.new("TextButton", KeyMain)
+    GetKeyBtn.Size = UDim2.new(0.43, 0, 0, 42)
+    GetKeyBtn.Position = UDim2.new(0.05, 0, 0.52, 0)
+    GetKeyBtn.BackgroundColor3 = Color3.fromRGB(24, 24, 36)
+    GetKeyBtn.Font = Enum.Font.Ubuntu
+    GetKeyBtn.Text = "LẤY LINK KEY"
+    GetKeyBtn.TextColor3 = Color3.fromRGB(0, 230, 255)
+    GetKeyBtn.TextSize = 13
+    Instance.new("UICorner", GetKeyBtn).CornerRadius = UDim.new(0, 8)
+    local GetKeyStroke = Instance.new("UIStroke", GetKeyBtn)
+    GetKeyStroke.Color = Color3.fromRGB(40, 55, 70)
 
-GetKeyBtn.MouseButton1Click:Connect(function()
-    if CopyToClipboard(Web_Get_Key_URL) then
-        StatusLabel.Text = "OK! Đã sao chép link Get Key thành công!"
-        StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-    end
-end)
+    local CheckKeyBtn = Instance.new("TextButton", KeyMain)
+    CheckKeyBtn.Size = UDim2.new(0.43, 0, 0, 42)
+    CheckKeyBtn.Position = UDim2.new(0.52, 0, 0.52, 0)
+    CheckKeyBtn.BackgroundColor3 = Color3.fromRGB(18, 36, 22)
+    CheckKeyBtn.Font = Enum.Font.Ubuntu
+    CheckKeyBtn.Text = "KIỂM TRA KEY"
+    CheckKeyBtn.TextColor3 = Color3.fromRGB(100, 255, 100)
+    CheckKeyBtn.TextSize = 13
+    Instance.new("UICorner", CheckKeyBtn).CornerRadius = UDim.new(0, 8)
+    local CheckKeyStroke = Instance.new("UIStroke", CheckKeyBtn)
+    CheckKeyStroke.Color = Color3.fromRGB(35, 70, 45)
 
-CheckKeyBtn.MouseButton1Click:Connect(function()
-    local userInput = string.gsub(KeyInput.Text, "%s+", "")
-    if userInput == System_Correct_Key or userInput == Backup_Key then
-        StatusLabel.Text = "XÁC THỰC THÀNH CÔNG! ĐANG MỞ MENU..."
-        StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-        task.wait(0.6)
+    local StatusLabel = Instance.new("TextLabel", KeyMain)
+    StatusLabel.Size = UDim2.new(0.9, 0, 0, 30)
+    StatusLabel.Position = UDim2.new(0.05, 0, 0.78, 0) 
+    StatusLabel.BackgroundTransparency = 1
+    StatusLabel.Font = Enum.Font.Ubuntu
+    StatusLabel.Text = "Hệ thống Key tự động làm mới sau mỗi 24 giờ!"
+    StatusLabel.TextColor3 = Color3.fromRGB(150, 150, 165)
+    StatusLabel.TextSize = 13
+
+    GetKeyBtn.MouseButton1Click:Connect(function()
+        if CopyToClipboard(Web_Get_Key_URL) then
+            StatusLabel.Text = "OK! Đã sao chép link Get Key thành công!"
+            StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
+        end
+    end)
+
+    CheckKeyBtn.MouseButton1Click:Connect(function()
+        local userInput = string.gsub(KeyInput.Text, "%s+", "")
+        if userInput == System_Correct_Key or userInput == Backup_Key then
+            StatusLabel.Text = "XÁC THỰC THÀNH CÔNG! ĐANG MỞ MENU..."
+            StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+            
+            -- LƯU KEY VÀO MÁY NGƯỜI CHƠI (Nếu không phải key Admin)
+            if userInput == System_Correct_Key and writefile then
+                pcall(function()
+                    writefile(Storage_File_Name, System_Correct_Key .. "|" .. Current_Day_String)
+                end)
+            end
+            
+            task.wait(0.6)
+            KeyGui:Destroy()
+            OpenMainMenu()
+        else
+            StatusLabel.Text = "Mã Key không chính xác hoặc đã hết hạn!"
+            StatusLabel.TextColor3 = Color3.fromRGB(255, 75, 75)
+        end
+    end)
+end
+
+-- ======================================================== --
+-- 8. KIỂM TRA FILE KEY ĐÃ LƯU KHI CHẠY SCRIPT
+-- ======================================================== --
+local Key_Is_Valid = false
+
+if readfile and isfile and isfile(Storage_File_Name) then
+    local success, content = pcall(function() return readfile(Storage_File_Name) end)
+    if success and content then
+        -- Phân tách Chuỗi Key và Ngày Lưu bằng dấu "|"
+        local data = string.split(content, "|")
+        local savedKey = data[1]
+        local savedDate = data[2]
         
-        KeyGui:Destroy()
-        MainGui.Enabled = true
-        FpsGui.Enabled = true -- Tự động bật khung FPS ngoài khi nhập đúng key
-        
-        -- Float Button mở nhanh
-        local ToggleGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-        ToggleGui.Name = "ThangLoToggleGui"
-        local ToggleButton = Instance.new("TextButton", ToggleGui)
-        ToggleButton.BackgroundColor3 = Color3.fromRGB(14, 14, 22)
-        ToggleButton.Position = UDim2.new(0, 20, 0, 140)
-        ToggleButton.Size = UDim2.new(0, 68, 0, 58)
-        ToggleButton.Font = Enum.Font.FredokaOne
-        ToggleButton.Text = "Thang Lo\nHub Free"
-        ToggleButton.TextColor3 = Color3.fromRGB(0, 255, 220)
-        ToggleButton.TextSize = 11
-        Instance.new("UICorner", ToggleButton).CornerRadius = UDim.new(0, 14)
-        local ToggleStroke = Instance.new("UIStroke", ToggleButton)
-        ApplyRainbowAura(ToggleStroke)
-        MakeWindowDraggable(ToggleButton)
-
-        local MenuDangMo = true
-        ToggleButton.MouseButton1Click:Connect(function()
-            MenuDangMo = not MenuDangMo
-            MainGui.Enabled = MenuDangMo
-        end)
-    else
-        StatusLabel.Text = "Mã Key không chính xác hoặc đã hết hạn!"
-        StatusLabel.TextColor3 = Color3.fromRGB(255, 75, 75)
+        -- Nếu Key đã lưu khớp với Key hệ thống hôm nay VÀ Ngày lưu đúng là ngày hôm nay
+        if savedKey == System_Correct_Key and savedDate == Current_Day_String then
+            Key_Is_Valid = true
+        else
+            -- Nếu hết 24h (sang ngày mới), xóa file cũ bắt get lại
+            pcall(function() delfile(Storage_File_Name) end)
+        end
     end
-end)
+end
 
+-- PHÂN LUỒNG KHỞI CHẠY
+if Key_Is_Valid then
+    -- Nếu key cũ còn hạn -> Vào thẳng menu chính, không hiện bảng nhập key
+    OpenMainMenu()
+else
+    -- Nếu chưa có key hoặc key hết hạn -> Hiện bảng nhập key bắt buộc
+    CreateKeySystemGui()
+end
