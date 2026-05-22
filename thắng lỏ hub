@@ -1,6 +1,6 @@
 -- ======================================================== --
---         THẰNG LỎ HUB FREE - PHIÊN BẢN CHÍNH THỨC             --
---         CẬP NHẬT: TỰ ĐỘNG ĐỔI KEY NGẪU NHIÊN SAU 24 GIỜ     --
+--        THẰNG LỎ HUB FREE - PHIÊN BẢN CHÍNH THỨC          --
+--        CẬP NHẬT: TỰ ĐỘNG ĐỔI KEY NGẪU NHIÊN SAU 24 GIỜ    --
 -- ======================================================== --
 
 -- [CẤU HÌNH HỆ THỐNG & ĐỒ HỌA]
@@ -157,7 +157,7 @@ AnimeBackground.BackgroundTransparency = 1
 AnimeBackground.Image = Anime_Asset_ID
 AnimeBackground.ScaleType = Enum.ScaleType.Crop
 AnimeBackground.ImageTransparency = 0.45      
-AnimeBackground.ZIndex = 1                     
+AnimeBackground.ZIndex = 1                                        
 Instance.new("UICorner", AnimeBackground).CornerRadius = UDim.new(0, 14)
 
 local MainTitle = Instance.new("TextLabel", MainFrame)
@@ -363,7 +363,7 @@ local function CreateScriptButton(parent, text, scriptUrl)
     end)
 end
 
--- Thêm Script Buttons
+-- Thêm Script Buttons (Danh mục Sailor Piece, Lucky Block, AOT giữ nguyên)
 CreateScriptButton(SailorPage, "Midgard Hub - Sailor Piece", "https://raw.githubusercontent.com/matheusmerigo/midgard/refs/heads/main/sailorpiece-main.lua")
 CreateScriptButton(SailorPage, "Bảo Hub - Sailor Piece", "https://raw.githubusercontent.com/bao-2204/bao/refs/heads/main/Main/SailorPiece.lua")
 CreateScriptButton(SailorPage, "Luarmor Loader V1 - Sailor", "https://api.luarmor.net/files/v4/loaders/5946add9ab91f1e04cb005346a8b1968.lua")
@@ -380,12 +380,11 @@ CreateScriptButton(AotPage, "Vynixius - AOT Evolution", "https://raw.githubuserc
 CreateScriptButton(AotPage, "Attack On Titan Mobile Hub", "https://raw.githubusercontent.com/GhostPlayer352/AOT/main/Hub.lua")
 CreateScriptButton(AotPage, "Horizon Hub - AOT", "https://raw.githubusercontent.com/HorizonHub/AOT/main/source.lua")
 
-CreateScriptButton(BloxPage, "Hoho Hub V3", 'https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_V3')
-CreateScriptButton(BloxPage, "RedzHub (Tối ưu Mobile)", "https://raw.githubusercontent.com/REDZHUB/BloxFruits/main/redz.lua")
-CreateScriptButton(BloxPage, "W-Azure Hub", "https://raw.githubusercontent.com/waza80/w-azure/main/NewGui.lua")
-CreateScriptButton(BloxPage, "Kraki Hub (Tiếng Việt)", "https://raw.githubusercontent.com/KrakiHub/BloxFruits/main/key.lua")
-CreateScriptButton(BloxPage, "Mukuro Hub V2", "https://raw.githubusercontent.com/xQuartyx/Mukuro/main/mukuro.lua")
-CreateScriptButton(BloxPage, "Ripper Hub V4", "https://raw.githubusercontent.com/xDestinyx/RipperHubV4/main/loading.lua")
+-- ======================================================== --
+--     DANH MỤC BLOX FRUITS ĐÃ ĐƯỢC THAY THẾ TOÀN BỘ CHÍNH XÁC  --
+-- ======================================================== --
+CreateScriptButton(BloxPage, "Script Ok Hub", "https://raw.githubusercontent.com/fakekuri/Okhubhere/refs/heads/main/MainBloxFruit.lua")
+CreateScriptButton(BloxPage, "Script HDanh Hub", "https://raw.githubusercontent.com/hdanhvip/hdanhhub/refs/heads/main/HdanhHubBeta.lua.txt")
 
 local FpsToggleBtn = Instance.new("TextButton", PerformancePage)
 FpsToggleBtn.Size = UDim2.new(0.96, 0, 0, 48)
